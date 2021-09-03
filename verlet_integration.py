@@ -20,12 +20,12 @@ points=[]
 sticks=[]
 
 threads=20
-fixation_spacing=3
+fixation_skips=3
 startx,starty=100,20
 fixed = False
 ycount=0
 test_list =[]
-
+fixation_spacing=20
 
 
 
@@ -34,9 +34,9 @@ for y in range(threads):
     for x in range(threads):
         
         points.append([startx+xcount,starty+ycount,startx+xcount,starty+ycount,fixed])
-        xcount+=int(10)
+        xcount+=int(fixation_spacing)
     
-    ycount+=int(10)
+    ycount+=int(fixation_spacing)
 
 
 
@@ -158,9 +158,9 @@ class verlet:
             
 
             if i not in range(len(self.points)-threads,len(self.points)):
-                self.sticks.append([self.points[i],self.points[i+threads],5])
+                self.sticks.append([self.points[i],self.points[i+threads],400/threads])
             if i not in [x for x in range(threads-1,len(self.points),threads)]:
-                self.sticks.append([self.points[i],self.points[i+1],5])
+                self.sticks.append([self.points[i],self.points[i+1],400/threads])
             count+=1
         
         
@@ -179,12 +179,12 @@ while verlet_on:
     dis.fill(black)
     mouse = pygame.mouse.get_pos()
     point.updatePoints()
-    for i in range(3):
+    for i in range(1):
         
         point.constrainPoints()
+        point.points[-1][0],point.points[-1][1]=mouse[0],mouse[1]
         
-        
-        for i in range(0,threads,fixation_spacing):
+        for i in range(0,threads,fixation_skips):
             point.points[i][-1]=True
             
         point.updateSticks()
@@ -193,4 +193,4 @@ while verlet_on:
     point.renderSticks()
   
     pygame.display.update()
-    clock.tick(50)
+    clock.tick(150)
